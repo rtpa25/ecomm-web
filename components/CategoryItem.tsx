@@ -1,6 +1,7 @@
 /** @format */
 
 import Image from 'next/image';
+import Link from 'next/link';
 import styled from 'styled-components';
 
 const Info = styled.div`
@@ -68,7 +69,9 @@ const CategoryItem: React.FC<CategoryItemProps> = ({
         <Title className='mb-5 text-4xl font-semibold text-white'>
           {title}
         </Title>
-        <Button className='p-3 cursor-pointer'>SHOP NOW</Button>
+        <Link href={'/products'} passHref>
+          <Button className='p-3 cursor-pointer'>SHOP NOW</Button>
+        </Link>
       </Info>
     </Container>
   );

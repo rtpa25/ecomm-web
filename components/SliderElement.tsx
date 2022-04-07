@@ -1,5 +1,6 @@
 /** @format */
 
+import Link from 'next/link';
 import styled from 'styled-components';
 
 interface Props {
@@ -48,6 +49,7 @@ const SliderElement: React.FC<Props> = ({ img, title, description, bg }) => {
       className='flex items-center w-screen h-screen justify-evenly'
       style={{ backgroundColor: bg }}>
       <ImageContainer className='flex-1 h-full'>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={img}
           alt='SUMMER SALE'
@@ -59,9 +61,11 @@ const SliderElement: React.FC<Props> = ({ img, title, description, bg }) => {
         <Desc className='mx-0 my-16 text-xl font-normal tracking-widest'>
           {description}
         </Desc>
-        <Button className='p-3.5 text-xl font-normal border border-solid border-black'>
-          SHOP NOW
-        </Button>
+        <Link href={'/products'} passHref>
+          <Button className='p-3.5 text-xl font-normal border border-solid border-black'>
+            SHOP NOW
+          </Button>
+        </Link>
       </div>
     </div>
   );

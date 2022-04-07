@@ -6,6 +6,9 @@ import {
   NavBar,
   Slider,
   Catagories,
+  DummyProducts,
+  NewsLetter,
+  Footer,
 } from '../components/Zexporter';
 
 const Home: NextPage = () => {
@@ -15,6 +18,9 @@ const Home: NextPage = () => {
       <NavBar />
       <Slider />
       <Catagories />
+      <DummyProducts />
+      <NewsLetter />
+      <Footer />
     </>
   );
 };
