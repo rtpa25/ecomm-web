@@ -2,7 +2,9 @@
 ✔ Figure out a way to make sence out of pagination in the list all products page @done (4/8/2022, 7:10:50 AM)
 ✔ Strengthen the type defination of the products on a central types folder @done (4/8/2022, 7:26:10 AM)
 ✔ Make all the filter and sorting algos work in the list All products page @done (4/8/2022, 11:25:15 AM)
-☐ Build the individual product detail page, create a central axios instance so that we do not need to repeat the base url infinite times
+☐ create a central axios instance so that we do not need to repeat the base url infinite times
+☐ Build the individual product detail page
+☐ Fix the material ui warning
 ☐ Test the flow of the app once and if satisfied then move to building the order endpoints and cover the edge cases
 --------------------------------------------------------------------------------------------------
 ☐ Build the order endpoints make sure the user is authenticated for the order related routes and make certain admin related routes as well for analysis puposes
