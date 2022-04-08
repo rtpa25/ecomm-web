@@ -49,16 +49,13 @@ const ProductList = () => {
   const [filters, setFilter] = useState({});
   const [sort, setSort] = useState('newest');
 
-  //TODO: CHECK IF IT WORKS
   const handleFilters = (
     e: React.ChangeEvent<HTMLSelectElement> | undefined
   ) => {
     const value = e?.target.value;
-    setFilter({
-      ...filters,
-      [e!.target.name]: value,
+    setFilter((prevState) => {
+      return { [e!.target.name]: value, ...prevState };
     });
-    console.log(filters, sort);
   };
 
   return (
@@ -69,22 +66,21 @@ const ProductList = () => {
       <FilterContainer className='flex justify-between'>
         <Filter>
           <FilterText>Filter Products:</FilterText>
-          <Select name='color' onChange={handleFilters}>
-            <Option disabled>Color</Option>
-            <Option>White</Option>
-            <Option>Black</Option>
-            <Option>Red</Option>
-            <Option>Blue</Option>
-            <Option>Yellow</Option>
-            <Option>Green</Option>
+          <Select name='catagories' onChange={handleFilters}>
+            <Option disabled>Catagories</Option>
+            <Option>retro</Option>
+            <Option>modern</Option>
+            <Option>minimalist</Option>
+            <Option>dapper</Option>
+            <Option>funk</Option>
           </Select>
           <Select name='size' onChange={handleFilters}>
             <Option disabled>Size</Option>
-            <Option>XS</Option>
-            <Option>S</Option>
-            <Option>M</Option>
-            <Option>L</Option>
-            <Option>XL</Option>
+            <Option>s</Option>
+            <Option>m</Option>
+            <Option>l</Option>
+            <Option>xl</Option>
+            <Option>xxl</Option>
           </Select>
         </Filter>
         <Filter>
@@ -98,7 +94,7 @@ const ProductList = () => {
           </Select>
         </Filter>
       </FilterContainer>
-      <Products category={''} filters={filters} sort={sort} />
+      <Products filters={filters} sort={sort} />
       <NewsLetter />
       <Footer />
     </div>
