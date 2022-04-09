@@ -7,12 +7,13 @@
 ✔ Integrate redux toolkit for global state managment @done (4/9/2022, 8:18:25 AM)
 ✔ Fix any errors that occur in the product detail page while building it @done (4/9/2022, 8:18:30 AM)
 ✔ Fix the material ui warning @done (4/9/2022, 8:23:04 AM)
-☐ Fix the redirect after auth issue
+✔ Fix the redirect after auth issue @done (4/9/2022, 11:38:43 AM)
 ✔ Test the flow of the app once and if satisfied then move to building the order endpoints and cover the edge cases @done (4/9/2022, 9:37:19 AM)
 --------------------------------------------------------------------------------------------------
 ✔ Build the order endpoints make sure the user is authenticated for the order related routes and make certain admin related routes as well for analysis puposes @done (4/9/2022, 11:19:17 AM)
 ☐ Hook up the order endpoints with the frontend make sure the entire flow is synced and really smooth and flawless
 ☐ Integrate stripe for payment gateway and also change the supertokens url from try.supertokens.io to a new prod version 
-☐ Go through the entire flow of the product and itereate over changes that you think are edge cases and are left out 
+☐ Go through the entire flow of the product and itereate over changes that you think are edge cases and are left out like error handling a few try catches and loading indicators just check out all possible edge cases
 -------------------------------------------------------------------------------------------------
 ☐ Deploy!!
+☐ Once deployed update the auth page to add test emails and test passwords for dummy review purposes 

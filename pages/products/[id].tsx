@@ -58,15 +58,6 @@ interface FilterColorProps {
   color: string;
 }
 
-const FilterColor = styled.div<FilterColorProps>`
-  height: 1.25rem;
-  width: 1.25rem;
-  border-radius: 50%;
-  background-color: ${(props) => props.color};
-  margin: 0 0.4rem;
-  cursor: pointer;
-`;
-
 const FilterSize = styled.select`
   margin-left: 0.625rem;
   padding: 0.4rem;
