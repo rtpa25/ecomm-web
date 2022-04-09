@@ -9,6 +9,17 @@ export const frontendConfig = () => {
     appInfo,
     recipeList: [
       EmailPasswordReact.init({
+        getRedirectionURL: async (context) => {
+          if (context.action === 'SUCCESS') {
+            if (context.redirectToPath !== undefined) {
+              // we are navigating back to where the user was before they authenticated
+              return context.redirectToPath;
+            }
+
+            return '/products';
+          }
+          return undefined;
+        },
         signInAndUpFeature: {
           signUpForm: {
             formFields: [

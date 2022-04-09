@@ -10,17 +10,10 @@ import {
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { axiosInstance } from '../../utils';
 import { getProductResType } from '../../types/ListAllProductsResTypes';
 import styled from 'styled-components';
 import { Remove, Add } from '@material-ui/icons';
-
-//TODO: first fetch the relevant data that will be rendered and get logs out of it
-//TODO: Update the backend of the specific route so it get's the id from the query
-//TODO: Then make the UI
-//TODO: Do proper error handling for the enitre frontend that has been made till now
-//TODO: shift to the order routes and build all order related routes
-//TODO: hook up the frontend with all the newly created routes
+import { useAppSelector } from '../../hooks';
 
 const Wrapper = styled.div`
   @media only screen and (max-width: 685px) {
@@ -108,40 +101,16 @@ const Button = styled.button`
 const Product: NextPage = () => {
   const router = useRouter();
   const { id } = router.query; //this loads up in the server side and is empty string
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<any>();
   const [productData, setProductData] = useState<getProductResType>();
+  const productsData = useAppSelector((state) => state.product);
 
   useEffect(() => {
-    const fetchProductData = async () => {
-      setIsLoading(true);
-      try {
-        const data = await axiosInstance.get('/getProduct', {
-          params: {
-            id: id,
-          },
-        });
-        setProductData(data?.data);
-      } catch (error: any) {
-        setError(error);
+    for (let i = 0; i < productsData.result.length; i++) {
+      if (productsData.result[i].product.id == id) {
+        setProductData(productsData.result[i]);
       }
-
-      setIsLoading(false);
-    };
-    fetchProductData();
-  }, [id]);
-
-  const Loader = (
-    <div className='flex justify-center items-center'>
-      <div
-        className='spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full'
-        role='status'>
-        <span className='visually-hidden'></span>
-      </div>
-    </div>
-  );
-
-  const ErrorHandler = <div>{error.message}</div>;
+    }
+  }, [id, productsData.result]);
 
   const RealPage = (
     <Wrapper className='flex p-12'>
@@ -190,7 +159,7 @@ const Product: NextPage = () => {
     <NoSSR>
       <NavBar />
       <AnnouncementBanner />
-      {error ? ErrorHandler : isLoading ? Loader : RealPage}
+      {RealPage}
       <NewsLetter />
       <Footer />
     </NoSSR>

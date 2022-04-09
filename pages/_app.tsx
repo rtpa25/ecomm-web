@@ -4,6 +4,8 @@ import '../styles/globals.css';
 import { AppProps } from 'next/app';
 import SuperTokensReact from 'supertokens-auth-react';
 import { frontendConfig } from '../config/frontEndConfig';
+import { store } from '../store/index';
+import { Provider } from 'react-redux';
 
 if (typeof window !== 'undefined') {
   // we only want to call this init function on the frontend, so we check typeof window !== 'undefined'
@@ -13,7 +15,11 @@ if (typeof window !== 'undefined') {
 // Create a client
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  return (
+    <Provider store={store}>
+      <Component {...pageProps} />
+    </Provider>
+  );
 }
 
 export default MyApp;

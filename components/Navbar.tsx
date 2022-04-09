@@ -52,9 +52,12 @@ const Navbar: FC = () => {
   return (
     <Container className='h-24'>
       <div className='flex justify-between px-4 py-4'>
-        <div className='text-center'>
-          <Heading className='text-4xl font-semibold'>NYKA.</Heading>
-        </div>
+        <Link href={'/'} passHref>
+          <div className='text-center'>
+            <Heading className='text-4xl font-semibold'>NYKA.</Heading>
+          </div>
+        </Link>
+
         <Right className='flex items-center justify-end '>
           {session == false ? (
             <>

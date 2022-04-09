@@ -1,13 +1,11 @@
 /** @format */
 import styled from 'styled-components';
 import Product from './Product';
-import axios, { AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
-import ListAllProductsResType, {
-  getProductResType,
-  product,
-} from '../types/ListAllProductsResTypes';
-import { axiosInstance } from '../utils';
+import { getProductResType } from '../types/ListAllProductsResTypes';
+import axiosInstance from '../utils';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import { setProductsData } from '../store/slices/productSlice';
 
 const Container = styled.div`
   display: grid;
@@ -21,9 +19,10 @@ interface ProductsProps {
 }
 
 const Products: React.FC<ProductsProps> = ({ filters, sort }) => {
-  const [data, setData] = useState<ListAllProductsResType>();
   const [isLoading, setIsLoading] = useState(false);
   const [offset, setOffset] = useState(0);
+  const dispatch = useAppDispatch();
+  const productData = useAppSelector((state) => state.product);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,11 +35,11 @@ const Products: React.FC<ProductsProps> = ({ filters, sort }) => {
           sort: sort,
         },
       });
-      setData(res.data);
+      dispatch(setProductsData({ data: res.data }));
       setIsLoading(false);
     };
     fetchData();
-  }, [filters, offset, sort]);
+  }, [dispatch, filters, offset, sort]);
 
   const paginationHandler = () => {
     //increase offset by a count of 8
@@ -61,7 +60,7 @@ const Products: React.FC<ProductsProps> = ({ filters, sort }) => {
             </div>
           </div>
         ) : (
-          data?.result?.map((res: getProductResType) => {
+          productData?.result?.map((res: getProductResType) => {
             return (
               <Product
                 img={res.product.image_url}
