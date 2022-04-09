@@ -1,7 +1,7 @@
 /** @format */
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import ListAllProductsResType from '../../types/ListAllProductsResTypes';
+import ListAllProductsResType from '../../types/products';
 
 const initalState: ListAllProductsResType = {
   result: [

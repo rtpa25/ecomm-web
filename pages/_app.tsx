@@ -6,6 +6,7 @@ import SuperTokensReact from 'supertokens-auth-react';
 import { frontendConfig } from '../config/frontEndConfig';
 import { store } from '../store/index';
 import { Provider } from 'react-redux';
+import dynamic from 'next/dynamic';
 
 if (typeof window !== 'undefined') {
   // we only want to call this init function on the frontend, so we check typeof window !== 'undefined'
@@ -22,4 +23,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default MyApp;
+export default dynamic(() => Promise.resolve(MyApp), {
+  ssr: false,
+});

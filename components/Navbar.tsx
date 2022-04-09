@@ -7,6 +7,9 @@ import { doesSessionExist } from 'supertokens-auth-react/recipe/session';
 import Badge from '@material-ui/core/Badge';
 import { ShoppingCartOutlined } from '@material-ui/icons';
 import { signOut } from 'supertokens-auth-react/recipe/emailpassword';
+import axiosInstance from '../utils';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import orderSlice, { setOrders } from '../store/slices/orderSlice';
 
 const Container = styled.div`
   @media only screen and (max-width: 890px) {
@@ -36,18 +39,26 @@ const Heading = styled.h1`
 
 const Navbar: FC = () => {
   const [session, setSession] = useState<boolean | undefined>(undefined);
+  const dispatch = useAppDispatch();
+  const ordersCount = useAppSelector((state) => state.orders.res.length);
+
   const signoutHandler = async () => {
     await signOut();
     window.location.href = '/';
   };
 
   useEffect(() => {
-    const fetchSession = async () => {
+    const fetchOrders = async () => {
       const val = await doesSessionExist();
       setSession(val);
+      if (val) {
+        const res = await axiosInstance.get('/getOrder');
+        console.log(res.data);
+        dispatch(setOrders({ data: res.data }));
+      }
     };
-    fetchSession();
-  }, []);
+    fetchOrders();
+  }, [dispatch]);
 
   return (
     <Container className='h-24'>
@@ -79,7 +90,7 @@ const Navbar: FC = () => {
               </div>
               <Link href={'/cart'} passHref>
                 <div className='text-lg cursor-pointer ml-10 font-light'>
-                  <Badge badgeContent={3} color='primary'>
+                  <Badge badgeContent={ordersCount} color='primary'>
                     <ShoppingCartOutlined />
                   </Badge>
                 </div>

@@ -5,15 +5,17 @@ import {
   NewsLetter,
   AnnouncementBanner,
   Footer,
-  NoSSR,
 } from '../../components/Zexporter';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { getProductResType } from '../../types/ListAllProductsResTypes';
+import { getProductResType } from '../../types/products';
 import styled from 'styled-components';
 import { Remove, Add } from '@material-ui/icons';
-import { useAppSelector } from '../../hooks';
+import axiosInstance from '../../utils';
+import { doesSessionExist } from 'supertokens-auth-react/recipe/session';
+import { useAppDispatch } from '../../hooks';
+import { pushOrder, setOrders } from '../../store/slices/orderSlice';
 
 const Wrapper = styled.div`
   @media only screen and (max-width: 685px) {
@@ -54,10 +56,6 @@ const FilterTitle = styled.span`
   font-weight: 200;
 `;
 
-interface FilterColorProps {
-  color: string;
-}
-
 const FilterSize = styled.select`
   margin-left: 0.625rem;
   padding: 0.4rem;
@@ -91,17 +89,54 @@ const Button = styled.button`
 
 const Product: NextPage = () => {
   const router = useRouter();
-  const { id } = router.query; //this loads up in the server side and is empty string
+  const { id } = router.query;
   const [productData, setProductData] = useState<getProductResType>();
-  const productsData = useAppSelector((state) => state.product);
+  const [count, setCount] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [size, setSize] = useState('');
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    for (let i = 0; i < productsData.result.length; i++) {
-      if (productsData.result[i].product.id == id) {
-        setProductData(productsData.result[i]);
+    const fetchProductData = async () => {
+      setIsLoading(true);
+      if (id != undefined || null) {
+        const res = await axiosInstance.get('/getProduct', {
+          params: {
+            id: id,
+          },
+        });
+        setProductData(res.data);
       }
+      setIsLoading(false);
+    };
+    fetchProductData();
+  }, [id]);
+
+  const createOrderHandler = async () => {
+    const sess = await doesSessionExist();
+    if (sess) {
+      const res = await axiosInstance.post('/createOrder', {
+        quantity: count,
+        address:
+          'not relevant yet can be accessed from the user with the help of a serparete page',
+        prodcut_id: parseInt(id as string),
+        selected_size: size,
+      });
+      dispatch(pushOrder({ order: res.data }));
+    } else {
+      router.push('/auth');
     }
-  }, [id, productsData.result]);
+  };
+
+  const Loader = (
+    <div className='flex justify-center items-center'>
+      <div
+        className='spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full'
+        role='status'>
+        <span className='visually-hidden'></span>
+      </div>
+    </div>
+  );
 
   const RealPage = (
     <Wrapper className='flex p-12'>
@@ -121,24 +156,41 @@ const Product: NextPage = () => {
         <FilterContainer className='flex justify-between w-6/12 mx-0 my-7'>
           <Filter>
             <FilterTitle>Size</FilterTitle>
-            <FilterSize onChange={() => {}}>
+            <FilterSize>
               {productData?.available_sizes.map((s: string) => (
-                <FilterSizeOption key={s}>{s}</FilterSizeOption>
+                <FilterSizeOption key={s} onClick={() => setSize(s)}>
+                  {s}
+                </FilterSizeOption>
               ))}
             </FilterSize>
           </Filter>
         </FilterContainer>
         <AddContainer className='flex items-center justify-between w-6/12'>
           <AmountContainer className='flex items-center text-semibold'>
-            <Remove onClick={() => {}} />
+            <div
+              onClick={() => {
+                setCount((prevState) => {
+                  return prevState - 1;
+                });
+              }}>
+              <Remove />
+            </div>
             <Amount className='flex items-center justify-center mx-2 my-0 border border-green-600 border-solid rounded-lg w-7 h-7'>
-              {}
+              {count}
             </Amount>
-            <Add onClick={() => {}} />
+            <div>
+              <Add
+                onClick={() => {
+                  setCount((prevState) => {
+                    return prevState + 1;
+                  });
+                }}
+              />
+            </div>
           </AmountContainer>
           <Button
             className='p-3.5 border border-green-600 border-solid font-medium'
-            onClick={() => {}}>
+            onClick={createOrderHandler}>
             ADD TO CART
           </Button>
         </AddContainer>
@@ -147,13 +199,13 @@ const Product: NextPage = () => {
   );
 
   return (
-    <NoSSR>
+    <>
       <NavBar />
       <AnnouncementBanner />
-      {RealPage}
+      {isLoading ? Loader : RealPage}
       <NewsLetter />
       <Footer />
-    </NoSSR>
+    </>
   );
 };
 
