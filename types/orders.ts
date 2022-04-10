@@ -8,6 +8,14 @@ export default interface order {
   created_at: string;
   updated_at: string;
   address: string;
-  prodcut_id: number;
+  product_id: number;
   selected_size: string;
+  id_2: number;
+  name: string;
+  description: string;
+  created_at_2: string;
+  updated_at_2: string;
+  image_url: string;
+  image_id: string;
+  price: string;
 }

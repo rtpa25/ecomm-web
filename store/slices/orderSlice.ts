@@ -6,19 +6,7 @@ import order from '../../types/orders';
 const initalState: {
   res: order[];
 } = {
-  res: [
-    {
-      id: 0,
-      address: '',
-      created_at: '',
-      prodcut_id: 0,
-      quantity: 0,
-      selected_size: '',
-      status: 1,
-      updated_at: '',
-      user_id: 1,
-    },
-  ],
+  res: [],
 };
 
 const OrdersSlice = createSlice({
@@ -31,8 +19,27 @@ const OrdersSlice = createSlice({
     pushOrder: (state, action: PayloadAction<{ order: order }>) => {
       state.res = [...state.res, action.payload.order];
     }, //this will be used in the individual product page after the order has been created
+    updateOrder: (
+      state,
+      action: PayloadAction<{ id: number; updatedQuantity: number }>
+    ) => {
+      for (let i = 0; i < state.res.length; i++) {
+        let element = state.res[i];
+        if (element.id === action.payload.id) {
+          element.quantity = action.payload.updatedQuantity;
+        }
+      }
+    }, //this will be used to update the quantity of the order in the cart page
+    delteOrder: (state, action: PayloadAction<{ orderId: number }>) => {
+      state.res = state.res.filter((o) => {
+        if (o.id !== action.payload.orderId) {
+          return o;
+        }
+      });
+    },
   },
 });
 
-export const { setOrders, pushOrder } = OrdersSlice.actions;
+export const { setOrders, pushOrder, updateOrder, delteOrder } =
+  OrdersSlice.actions;
 export default OrdersSlice.reducer;

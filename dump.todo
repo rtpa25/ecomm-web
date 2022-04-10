@@ -12,16 +12,17 @@
 --------------------------------------------------------------------------------------------------
 ✔ Build the order endpoints make sure the user is authenticated for the order related routes and make certain admin related routes as well for analysis puposes @done (4/9/2022, 11:19:17 AM)
 ✔ Fix the arcthitecture bug in the products page the way we fetch all the procuts is wrong because a network request is not being caused at all inside the individual product page so after refresh it just vanishes @done (4/9/2022, 4:03:15 PM)
-☐ Hook up the order endpoints with the frontend make sure the entire flow is synced and really smooth and flawless
+✔ Hook up the order endpoints with the frontend make sure the entire flow is synced and really smooth and flawless @done (4/10/2022, 10:12:50 AM)
   ✔ Make the product detail page functional @done (4/9/2022, 4:25:01 PM)
   ✔ Make a post request from that page to create an order @done (4/9/2022, 4:25:04 PM)
   ✔ Add redux slice for cart/orders @done (4/9/2022, 6:27:07 PM)
     ✔ this state is responsible to store all the orders of the logged in user @done (4/9/2022, 6:19:46 PM)
     ✔ there should be one reducer to add an order to the state when a post request for the same is created in the individual product page @done (4/9/2022, 6:19:49 PM)
     ✔ logic for fetching the total no. of orders for a certain user should be in the nav bar @done (4/9/2022, 6:27:03 PM)
-  ☐ Make the cart page and fetch all the orders of that user
-  ☐ Hook up the update endpoints with the cart page for updating the quantity and sizes of the products
-  ☐ Hook up the delete endpoint to delete a certain order from the cart
+  ✔ Make the cart page and fetch all the orders of that user @done (4/10/2022, 8:53:43 AM)
+  ✔ Make a state slice to depict the total cart value for that user @done (4/10/2022, 8:53:46 AM)
+  ✔ Hook up the update endpoints with the cart page for updating the quantity and sizes of the products @done (4/10/2022, 9:50:43 AM)
+  ✔ Hook up the delete endpoint to delete a certain order from the cart and the UI for it @done (4/10/2022, 10:12:46 AM)
 ☐ Integrate stripe for payment gateway and also change the supertokens url from try.supertokens.io to a new prod version 
 ☐ Go through the entire flow of the product and itereate over changes that you think are edge cases and are left out like error handling a few try catches and loading indicators just check out all possible edge cases
 -------------------------------------------------------------------------------------------------

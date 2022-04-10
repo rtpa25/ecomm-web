@@ -1,7 +1,7 @@
 /** @format */
 
 import { NextPage } from 'next';
-import { Add, Remove } from '@material-ui/icons';
+import { Add, Remove, Delete } from '@material-ui/icons';
 import { useState } from 'react';
 import styled from 'styled-components';
 import {
@@ -12,6 +12,9 @@ import {
 } from '../components/Zexporter';
 import { useAppDispatch, useAppSelector } from '../hooks/index';
 import Link from 'next/link';
+import axiosInstance from '../utils';
+import { delteOrder, updateOrder } from '../store/slices/orderSlice';
+import order from '../types/orders';
 
 interface TopButtonProps {
   bod: 'outlined' | 'filled';
@@ -67,7 +70,7 @@ const PriceDetail = styled.div`
   flex: 1;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   flex-direction: column;
   @media only screen and (max-width: 685px) {
     flex-direction: row;
@@ -129,7 +132,71 @@ const TopButtons = styled.div`
   }
 `;
 
-const cart: NextPage = () => {
+const Cart: NextPage = () => {
+  const orders = useAppSelector((state) => state.orders.res);
+  const dispatch = useAppDispatch();
+  let total = 0;
+  for (let i = 0; i < orders.length; i++) {
+    const { price, quantity } = orders[i];
+    total += parseInt(price) * quantity;
+  }
+
+  const updateCartHandler = async (
+    id: number,
+    product_id: number,
+    quantity: number,
+    type: 'inc' | 'dec'
+  ) => {
+    const updatedOrder = orders.find((o) => {
+      return o.id === id;
+    });
+
+    try {
+      //optimistic update of order quantity before the network req is successfull
+      dispatch(
+        updateOrder({
+          id: id,
+          updatedQuantity:
+            type === 'inc'
+              ? updatedOrder!.quantity + 1
+              : updatedOrder!.quantity - 1,
+        })
+      );
+      const res = await axiosInstance.patch('/updateOrder', {
+        id: id,
+        quantity: type === 'inc' ? quantity + 1 : quantity - 1,
+        address:
+          'this field is not relevant yet I can add an additional set of dropdowns or pages for user to select address if it is a real store',
+        prodcut_id: product_id,
+        selected_size: 'm',
+      });
+    } catch (error) {
+      //rollback the optimistic update if some unexpected error occurs
+      console.log(error);
+      dispatch(
+        updateOrder({
+          id: id,
+          updatedQuantity:
+            type === 'inc' ? updatedOrder!.quantity : updatedOrder!.quantity,
+        })
+      );
+    }
+  };
+
+  const deleteProductHandler = async (orderId: number) => {
+    try {
+      dispatch(delteOrder({ orderId: orderId }));
+      await axiosInstance.delete('/deleteOrder', {
+        params: {
+          order_id: orderId,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      window.location.reload(); //refresh if the network request is unsuccessfull
+    }
+  };
+
   return (
     <div className=''>
       <NavBar />
@@ -147,60 +214,71 @@ const cart: NextPage = () => {
         </TopButtons>
         <Wrapper className='flex justify-between'>
           <Info className=''>
-            {/* {cart.products.map((product) => {
+            {orders.map((order) => {
               return (
-                <Product key={product.product._id}>
+                <Product key={order.id_2}>
                   <ProductDetail>
-                    <Image src={product.product.img.secure_url} />
+                    <Image src={order.image_url} alt={order.name} />
                     <Details>
                       <span>
-                        <b>Product:</b> {product.product.name}
+                        <b>Product:</b> {order.name}
                       </span>
                       <span>
-                        <b>ID:</b> {product.product._id}
+                        <b>Size:</b> {order.selected_size}
+                      </span>
+                      <span>
+                        <b>OrderId:</b> {order.id}
                       </span>
                     </Details>
                   </ProductDetail>
                   <PriceDetail>
-                    <ProductAmountContainer>
-                      <QuantityButtonInc
-                        onClick={() =>
-                          updateCartHandler(
-                            product._id,
-                            product.product._id,
-                            product.quantity,
-                            'inc'
-                          )
-                        }
-                      />
-                      <ProductAmount>{product.quantity}</ProductAmount>
-                      <QuantityButtonDec
-                        onClick={() =>
-                          updateCartHandler(
-                            product._id,
-                            product.product._id,
-                            product.quantity,
-                            'dec'
-                          )
-                        }
-                      />
-                    </ProductAmountContainer>
-                    <ProductPrice>
-                      {' '}
-                      $ {product.product.price * product.quantity}
-                    </ProductPrice>
+                    <div>
+                      <ProductAmountContainer>
+                        <QuantityButtonInc
+                          onClick={() =>
+                            updateCartHandler(
+                              order.id,
+                              order.product_id,
+                              order.quantity,
+                              'inc'
+                            )
+                          }
+                        />
+                        <ProductAmount>{order.quantity}</ProductAmount>
+                        <QuantityButtonDec
+                          onClick={() =>
+                            updateCartHandler(
+                              order.id,
+                              order.product_id,
+                              order.quantity,
+                              'dec'
+                            )
+                          }
+                        />
+                      </ProductAmountContainer>
+                      <ProductPrice>
+                        {' '}
+                        $ {parseInt(order.price) * order.quantity}
+                      </ProductPrice>
+                    </div>
+                    <div
+                      className='cursor-pointer'
+                      onClick={() => {
+                        deleteProductHandler(order.id);
+                      }}>
+                      <Delete color='secondary' />
+                    </div>
                   </PriceDetail>
                 </Product>
               );
-            })} */}
-
+            })}
             <hr />
           </Info>
           <Summary className=''>
             <h1 className='text-4xl font-extralight'>ORDER SUMMARY</h1>
             <SummaryItem>
               <span>Subtotal</span>
-              <span>$ {}</span>
+              <span>$ {total}</span>
             </SummaryItem>
             <SummaryItem>
               <span>Estimated Shipping</span>
@@ -212,7 +290,7 @@ const cart: NextPage = () => {
             </SummaryItem>
             <SummaryItem className='text-xl font-semibold'>
               <span>Total</span>
-              <span>$ {}</span>
+              <span>$ {total}</span>
             </SummaryItem>
           </Summary>
         </Wrapper>
@@ -223,4 +301,4 @@ const cart: NextPage = () => {
   );
 };
 
-export default cart;
+export default Cart;
