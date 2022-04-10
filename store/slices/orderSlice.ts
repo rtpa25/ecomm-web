@@ -36,7 +36,7 @@ const OrdersSlice = createSlice({
           return o;
         }
       });
-    },
+    }, //used in the cart page
   },
 });
 

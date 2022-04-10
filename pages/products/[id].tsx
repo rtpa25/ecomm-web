@@ -5,6 +5,7 @@ import {
   NewsLetter,
   AnnouncementBanner,
   Footer,
+  LoadingIndicator,
 } from '../../components/Zexporter';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -15,7 +16,7 @@ import { Remove, Add } from '@material-ui/icons';
 import axiosInstance from '../../utils';
 import { doesSessionExist } from 'supertokens-auth-react/recipe/session';
 import { useAppDispatch } from '../../hooks';
-import { pushOrder, setOrders } from '../../store/slices/orderSlice';
+import { pushOrder } from '../../store/slices/orderSlice';
 
 const Wrapper = styled.div`
   @media only screen and (max-width: 685px) {
@@ -128,16 +129,6 @@ const Product: NextPage = () => {
     }
   };
 
-  const Loader = (
-    <div className='flex justify-center items-center'>
-      <div
-        className='spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full'
-        role='status'>
-        <span className='visually-hidden'></span>
-      </div>
-    </div>
-  );
-
   const RealPage = (
     <Wrapper className='flex p-12'>
       <ImgContainer className='flex-1'>
@@ -202,7 +193,7 @@ const Product: NextPage = () => {
     <>
       <NavBar />
       <AnnouncementBanner />
-      {isLoading ? Loader : RealPage}
+      {isLoading ? LoadingIndicator : RealPage}
       <NewsLetter />
       <Footer />
     </>

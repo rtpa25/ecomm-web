@@ -2,10 +2,11 @@
 import styled from 'styled-components';
 import Product from './Product';
 import { useEffect, useState } from 'react';
-import { getProductResType } from '../types/ListAllProductsResTypes';
+import { getProductResType } from '../types/products';
 import axiosInstance from '../utils';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { setProductsData } from '../store/slices/productSlice';
+import LoadingIndicator from './LoadingIndicator';
 
 const Container = styled.div`
   display: grid;
@@ -23,19 +24,25 @@ const Products: React.FC<ProductsProps> = ({ filters, sort }) => {
   const [offset, setOffset] = useState(0);
   const dispatch = useAppDispatch();
   const productData = useAppSelector((state) => state.product);
+  const [error, setError] = useState<any>();
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const res = await axiosInstance.get('/listProducts', {
-        params: {
-          limit: 8,
-          offset: offset,
-          filters: filters,
-          sort: sort,
-        },
-      });
-      dispatch(setProductsData({ data: res.data }));
+      try {
+        const res = await axiosInstance.get('/listProducts', {
+          params: {
+            limit: 8,
+            offset: offset,
+            filters: filters,
+            sort: sort,
+          },
+        });
+        dispatch(setProductsData({ data: res.data }));
+      } catch (error) {
+        console.log(error);
+        setError(error);
+      }
       setIsLoading(false);
     };
     fetchData();
@@ -48,27 +55,27 @@ const Products: React.FC<ProductsProps> = ({ filters, sort }) => {
     });
   };
 
+  const products = productData?.result?.map((res: getProductResType) => {
+    return (
+      <Product
+        img={res.product.image_url}
+        id={res.product.id}
+        key={res.product.id}
+      />
+    );
+  });
+
   return (
     <>
       <Container className=' p-7'>
-        {isLoading ? (
-          <div className='flex justify-center items-center'>
-            <div
-              className='spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full'
-              role='status'>
-              <span className='visually-hidden'></span>
-            </div>
-          </div>
+        {!!error === false ? (
+          isLoading ? (
+            <LoadingIndicator />
+          ) : (
+            products
+          )
         ) : (
-          productData?.result?.map((res: getProductResType) => {
-            return (
-              <Product
-                img={res.product.image_url}
-                id={res.product.id}
-                key={res.product.id}
-              />
-            );
-          })
+          <div>{'Something Went Wrong'}</div>
         )}
       </Container>
       <div className='flex justify-center items-center m-10'>

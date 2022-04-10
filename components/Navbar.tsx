@@ -49,12 +49,17 @@ const Navbar: FC = () => {
 
   useEffect(() => {
     const fetchOrders = async () => {
-      const val = await doesSessionExist();
-      setSession(val);
-      if (val) {
-        const res = await axiosInstance.get('/getOrder');
-        console.log(res.data);
-        dispatch(setOrders({ data: res.data }));
+      try {
+        const val = await doesSessionExist();
+        setSession(val);
+        if (val) {
+          const res = await axiosInstance.get('/getOrder');
+          console.log(res.data);
+          dispatch(setOrders({ data: res.data }));
+        }
+      } catch (error) {
+        console.log(error);
+        //can show an error modal
       }
     };
     fetchOrders();
