@@ -2,7 +2,7 @@
 
 import { NextPage } from 'next';
 import { Add, Remove, Delete } from '@material-ui/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
   AnnouncementBanner,
@@ -15,6 +15,7 @@ import Link from 'next/link';
 import axiosInstance from '../utils';
 import { delteOrder, updateOrder } from '../store/slices/orderSlice';
 import order from '../types/orders';
+import StripeCheckout from 'react-stripe-checkout';
 
 interface TopButtonProps {
   bod: 'outlined' | 'filled';
@@ -183,6 +184,26 @@ const Cart: NextPage = () => {
     }
   };
 
+  const [stripeToken, setStripeToken] = useState(null);
+  const KEY =
+    'pk_test_51Jy8ycSFA8z2kwZwnxQXmFjttu133U1uIjZ5gAXbIKvbvuRBoYShBfdH5aSEDtMdHv0zhLF7gvytN4UHiTFh5hCt00bRFTYcf7';
+  const onToken = (token: any) => {
+    setStripeToken(token);
+  };
+
+  const paymentHandler = async () => {
+    try {
+      let res = await axiosInstance.post(`/captureStripePayment`, {
+        amount: total * 100,
+      });
+      console.log(res);
+
+      stripeToken && total >= 10;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const deleteProductHandler = async (orderId: number) => {
     try {
       dispatch(delteOrder({ orderId: orderId }));
@@ -211,7 +232,24 @@ const Cart: NextPage = () => {
               CONTINUE SHOPPING
             </TopButton>
           </Link>
+          <StripeCheckout
+            name='NYKA'
+            image='https://cdn.gadgets360.com/kostprice/assets/store/1493096224_nykaa.png'
+            billingAddress
+            shippingAddress
+            description={`Your total is $${total}`}
+            amount={total * 100}
+            token={onToken}
+            stripeKey={KEY as string}>
+            <TopButton
+              bod='filled'
+              className='text-green-500 bg-black '
+              onClick={paymentHandler}>
+              CHECKOUT NOW
+            </TopButton>
+          </StripeCheckout>
         </TopButtons>
+
         <Wrapper className='flex justify-between'>
           <Info className=''>
             {orders.map((order) => {
@@ -292,6 +330,22 @@ const Cart: NextPage = () => {
               <span>Total</span>
               <span>$ {total}</span>
             </SummaryItem>
+            <StripeCheckout
+              name='NYKA'
+              image='https://cdn.gadgets360.com/kostprice/assets/store/1493096224_nykaa.png'
+              billingAddress
+              shippingAddress
+              description={`Your total is $${total}`}
+              amount={total * 100}
+              token={onToken}
+              stripeKey={KEY as string}>
+              <TopButton
+                bod='filled'
+                className='text-green-500 bg-black '
+                onClick={paymentHandler}>
+                CHECKOUT NOW
+              </TopButton>
+            </StripeCheckout>
           </Summary>
         </Wrapper>
       </div>

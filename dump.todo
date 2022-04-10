@@ -23,8 +23,12 @@
   ✔ Make a state slice to depict the total cart value for that user @done (4/10/2022, 8:53:46 AM)
   ✔ Hook up the update endpoints with the cart page for updating the quantity and sizes of the products @done (4/10/2022, 9:50:43 AM)
   ✔ Hook up the delete endpoint to delete a certain order from the cart and the UI for it @done (4/10/2022, 10:12:46 AM)
-☐ Integrate stripe for payment gateway and also change the supertokens url from try.supertokens.io to a new prod version 
+✔ Integrate stripe for payment gateway and also change the supertokens url from try.supertokens.io to a new prod version @done (4/10/2022, 11:38:25 AM)
+☐ Wherever you make an api request make sure to handle errors in all those places
+☐ Try to fix the proper selection of the filter items
+☐ Do some code refactoring wherever needed 
 ☐ Go through the entire flow of the product and itereate over changes that you think are edge cases and are left out like error handling a few try catches and loading indicators just check out all possible edge cases
 -------------------------------------------------------------------------------------------------
 ☐ Deploy!!
 ☐ Once deployed update the auth page to add test emails and test passwords for dummy review purposes 
+☐ Read about redux toolkit, revise all the majority hooks and check for speed optimizations
