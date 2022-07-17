@@ -2,7 +2,7 @@
 
 import styled from 'styled-components';
 import { popularProducts } from '../data';
-import Product from './Product';
+import DummyProduct from './DummyProduct';
 
 const Container = styled.div`
   display: grid;
@@ -14,7 +14,9 @@ const DummyProducts = () => {
   return (
     <Container className=' p-7'>
       {popularProducts.map((product) => {
-        return <Product img={product.img} id={product.id} key={product.id} />;
+        return (
+          <DummyProduct img={product.img} id={product.id} key={product.id} />
+        );
       })}
     </Container>
   );

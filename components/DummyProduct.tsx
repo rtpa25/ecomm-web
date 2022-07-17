@@ -1,7 +1,6 @@
 /** @format */
 
 import Image from 'next/image';
-import Link from 'next/link';
 import styled from 'styled-components';
 
 const Info = styled.div`
@@ -28,16 +27,14 @@ interface ProductProps {
   img: string;
   id: string;
 }
-const Product: React.FC<ProductProps> = ({ img, id }) => {
+const DummyProduct: React.FC<ProductProps> = ({ img, id }) => {
   return (
     <Container className='m-1.5 h-80 flex items-center justify-center bg-blue-50 relative'>
       <Circle className='absolute bg-white h-60 w-60' />
       <Image src={img} alt={id} className='z-10' layout='fill' />
-      <Link href={`/products/${id}`} passHref>
-        <Info className='absolute z-20 flex items-center justify-center w-full h-full'></Info>
-      </Link>
+      <Info className='absolute z-20 flex items-center justify-center w-full h-full'></Info>
     </Container>
   );
 };
 
-export default Product;
+export default DummyProduct;
