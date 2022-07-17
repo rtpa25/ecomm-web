@@ -53,7 +53,7 @@ export const popularProducts = [
   },
   {
     id: '2',
-    img: 'https://cdn.shopify.com/s/files/1/0101/4832/products/Angela_Natural_Tee.png?v=1606780388',
+    img: 'https://i.ibb.co/5r6qNmJ/benjamin-rascoe-KF-q-SGqswg-unsplash-removebg-preview.png',
   },
   {
     id: '3',
