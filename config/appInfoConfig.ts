@@ -5,4 +5,6 @@ export const appInfo = {
   appName: 'ecomm',
   apiDomain: 'http://localhost:8080',
   websiteDomain: 'http://localhost:3000',
+  apiBasePath: '/auth',
+  websiteBasePath: '/auth',
 };

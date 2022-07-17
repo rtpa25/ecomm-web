@@ -33,7 +33,7 @@ const Product: React.FC<ProductProps> = ({ img, id }) => {
     <Container className='m-1.5 h-80 flex items-center justify-center bg-blue-50 relative'>
       <Circle className='absolute bg-white h-60 w-60' />
       <Image src={img} alt={id} className='z-10' layout='fill' />
-      <Link href={`/products/${id}`} passHref>
+      <Link href={`/products`} passHref>
         <Info className='absolute z-20 flex items-center justify-center w-full h-full'></Info>
       </Link>
     </Container>

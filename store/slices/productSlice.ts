@@ -28,7 +28,7 @@ const ProductSlice = createSlice({
   initialState: initalState,
   reducers: {
     setProductsData: (
-      state,
+      state: ListAllProductsResType,
       action: PayloadAction<{ data: ListAllProductsResType }>
     ) => {
       state.result = action.payload.data.result;

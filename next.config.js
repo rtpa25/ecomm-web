@@ -1,5 +1,3 @@
-/** @format */
-
 const nextConfig = {
   reactStrictMode: true,
   images: {
@@ -12,6 +10,7 @@ const nextConfig = {
       'images.ctfassets.net',
       'www.pngarts.com',
       'previews.123rf.com',
+      'images.unsplash.com',
     ],
   },
   compiler: {

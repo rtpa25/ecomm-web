@@ -9,7 +9,7 @@ import { ShoppingCartOutlined } from '@material-ui/icons';
 import { signOut } from 'supertokens-auth-react/recipe/emailpassword';
 import axiosInstance from '../utils';
 import { useAppDispatch, useAppSelector } from '../hooks';
-import orderSlice, { setOrders } from '../store/slices/orderSlice';
+import { setOrders } from '../store/slices/orderSlice';
 
 const Container = styled.div`
   @media only screen and (max-width: 890px) {
