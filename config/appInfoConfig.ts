@@ -1,10 +1,11 @@
 /** @format */
 
+import { __isProd__ } from '../utils';
+
 export const appInfo = {
-  // learn more about this on https://supertokens.io/docs/emailpassword/appinfo
   appName: 'ecomm',
-  apiDomain: 'http://localhost:8080',
-  websiteDomain: 'http://localhost:3000',
+  apiDomain: __isProd__ ? 'https://api.nyka.site' : 'http://localhost:8080',
+  websiteDomain: __isProd__ ? 'https://nyka.site' : 'http://localhost:3000',
   apiBasePath: '/auth',
   websiteBasePath: '/auth',
 };
